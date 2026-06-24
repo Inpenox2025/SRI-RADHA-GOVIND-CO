@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -18,10 +18,12 @@ module.exports = async function handler(req, res) {
   const user = verifyToken(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
+  const sql = getSQL();
+
   // GET — list sub-admins
   if (req.method === 'GET') {
     try {
-      const { rows } = await sql`SELECT id, username, role, created_at FROM users ORDER BY created_at ASC`;
+      const rows = await sql`SELECT id, username, role, created_at FROM users ORDER BY created_at ASC`;
       return res.status(200).json({ success: true, users: rows });
     } catch (error) {
       return res.status(500).json({ error: 'Failed to fetch users', details: error.message });
@@ -33,8 +35,7 @@ module.exports = async function handler(req, res) {
     if (user.role !== 'admin') return res.status(403).json({ error: 'Only admin can create users' });
 
     try {
-      // Check sub-admin count
-      const { rows: countRows } = await sql`SELECT COUNT(*) as total FROM users WHERE role = 'sub_admin'`;
+      const countRows = await sql`SELECT COUNT(*) as total FROM users WHERE role = 'sub_admin'`;
       if (parseInt(countRows[0].total) >= 2) {
         return res.status(400).json({ error: 'Maximum 2 sub-admin users allowed' });
       }
@@ -42,12 +43,11 @@ module.exports = async function handler(req, res) {
       const { username, password } = req.body;
       if (!username || !password) return res.status(400).json({ error: 'Username and password are required' });
 
-      // Check duplicate
-      const { rows: existing } = await sql`SELECT id FROM users WHERE username = ${username}`;
+      const existing = await sql`SELECT id FROM users WHERE username = ${username}`;
       if (existing.length > 0) return res.status(400).json({ error: 'Username already exists' });
 
       const hash = await bcrypt.hash(password, 10);
-      const { rows } = await sql`
+      const rows = await sql`
         INSERT INTO users (username, password_hash, role)
         VALUES (${username}, ${hash}, 'sub_admin')
         RETURNING id, username, role, created_at

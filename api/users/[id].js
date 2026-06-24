@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -21,11 +21,12 @@ module.exports = async function handler(req, res) {
   const id = req.query.id;
   if (!id) return res.status(400).json({ error: 'ID is required' });
 
+  const sql = getSQL();
+
   // PUT — update sub-admin
   if (req.method === 'PUT') {
     try {
-      // Don't allow editing admin user role
-      const { rows: check } = await sql`SELECT role FROM users WHERE id = ${id}`;
+      const check = await sql`SELECT role FROM users WHERE id = ${id}`;
       if (check.length === 0) return res.status(404).json({ error: 'User not found' });
 
       const { username, password } = req.body;
@@ -36,7 +37,7 @@ module.exports = async function handler(req, res) {
         await sql`UPDATE users SET username = ${username} WHERE id = ${id}`;
       }
 
-      const { rows } = await sql`SELECT id, username, role, created_at FROM users WHERE id = ${id}`;
+      const rows = await sql`SELECT id, username, role, created_at FROM users WHERE id = ${id}`;
       return res.status(200).json({ success: true, user: rows[0] });
     } catch (error) {
       return res.status(500).json({ error: 'Failed to update user', details: error.message });
@@ -46,7 +47,7 @@ module.exports = async function handler(req, res) {
   // DELETE — delete sub-admin (cannot delete admin)
   if (req.method === 'DELETE') {
     try {
-      const { rows: check } = await sql`SELECT role FROM users WHERE id = ${id}`;
+      const check = await sql`SELECT role FROM users WHERE id = ${id}`;
       if (check.length === 0) return res.status(404).json({ error: 'User not found' });
       if (check[0].role === 'admin') return res.status(400).json({ error: 'Cannot delete admin user' });
 

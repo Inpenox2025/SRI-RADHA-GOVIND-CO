@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sri-radha-govind-secret-key-2024';
@@ -14,26 +14,28 @@ function verifyToken(req) {
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const sql = getSQL();
+
   // GET — list dropdowns (public, no auth for enquiry form)
   if (req.method === 'GET') {
     try {
       const category = req.query.category || '';
-      let result;
+      let rows;
 
       if (category) {
-        result = await sql`SELECT * FROM dropdowns WHERE category = ${category} ORDER BY sort_order ASC, label ASC`;
+        rows = await sql`SELECT * FROM dropdowns WHERE category = ${category} ORDER BY sort_order ASC, label ASC`;
       } else {
-        result = await sql`SELECT * FROM dropdowns ORDER BY category ASC, sort_order ASC, label ASC`;
+        rows = await sql`SELECT * FROM dropdowns ORDER BY category ASC, sort_order ASC, label ASC`;
       }
 
       // Group by category
       const grouped = {};
-      result.rows.forEach(row => {
+      rows.forEach(row => {
         if (!grouped[row.category]) grouped[row.category] = [];
         grouped[row.category].push(row);
       });
 
-      return res.status(200).json({ success: true, dropdowns: result.rows, grouped });
+      return res.status(200).json({ success: true, dropdowns: rows, grouped });
     } catch (error) {
       return res.status(500).json({ error: 'Failed to fetch dropdowns', details: error.message });
     }
@@ -48,7 +50,7 @@ module.exports = async function handler(req, res) {
       const { category, label, sort_order } = req.body;
       if (!category || !label) return res.status(400).json({ error: 'Category and label are required' });
 
-      const { rows } = await sql`
+      const rows = await sql`
         INSERT INTO dropdowns (category, label, sort_order)
         VALUES (${category}, ${label}, ${sort_order || 0})
         RETURNING *

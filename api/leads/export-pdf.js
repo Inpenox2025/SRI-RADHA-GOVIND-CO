@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 const PDFDocument = require('pdfkit');
 
@@ -34,7 +34,8 @@ module.exports = async function handler(req, res) {
   if (!id) return res.status(400).json({ error: 'Lead ID is required (?id=X)' });
 
   try {
-    const { rows } = await sql`SELECT * FROM leads WHERE id = ${id}`;
+    const sql = getSQL();
+    const rows = await sql`SELECT * FROM leads WHERE id = ${id}`;
     if (rows.length === 0) return res.status(404).json({ error: 'Lead not found' });
 
     const lead = rows[0];

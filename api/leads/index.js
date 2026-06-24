@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sri-radha-govind-secret-key-2024';
@@ -17,12 +17,13 @@ module.exports = async function handler(req, res) {
   // POST — create lead (public for enquiry form, no auth needed)
   if (req.method === 'POST') {
     try {
+      const sql = getSQL();
       const d = req.body;
       if (!d.full_name) return res.status(400).json({ error: 'Full name is required' });
 
       const due = (parseFloat(d.total_fee) || 0) - (parseFloat(d.paid) || 0);
 
-      const { rows } = await sql`
+      const rows = await sql`
         INSERT INTO leads (
           status, full_name, district, employee_category, date_of_birth,
           mobile_no, alt_mobile_no, bank_account_no, ifsc_code,
@@ -55,6 +56,7 @@ module.exports = async function handler(req, res) {
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
     try {
+      const sql = getSQL();
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 15;
       const offset = (page - 1) * limit;
@@ -62,40 +64,40 @@ module.exports = async function handler(req, res) {
       const status = req.query.status || '';
       const district = req.query.district || '';
 
-      let countQuery, dataQuery;
+      let countRows, dataRows;
 
       if (search && status && district) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status} AND district = ${district}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status} AND district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status} AND district = ${district}`;
+        dataRows = await sql`SELECT * FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status} AND district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else if (search && status) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status}`;
+        dataRows = await sql`SELECT * FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND status = ${status} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else if (search && district) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND district = ${district}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND district = ${district}`;
+        dataRows = await sql`SELECT * FROM leads WHERE (full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}) AND district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else if (status && district) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE status = ${status} AND district = ${district}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE status = ${status} AND district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE status = ${status} AND district = ${district}`;
+        dataRows = await sql`SELECT * FROM leads WHERE status = ${status} AND district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else if (search) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'}`;
+        dataRows = await sql`SELECT * FROM leads WHERE full_name ILIKE ${'%' + search + '%'} OR mobile_no ILIKE ${'%' + search + '%'} OR pan_card_no ILIKE ${'%' + search + '%'} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else if (status) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE status = ${status}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE status = ${status} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE status = ${status}`;
+        dataRows = await sql`SELECT * FROM leads WHERE status = ${status} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else if (district) {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads WHERE district = ${district}`;
-        dataQuery = await sql`SELECT * FROM leads WHERE district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads WHERE district = ${district}`;
+        dataRows = await sql`SELECT * FROM leads WHERE district = ${district} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       } else {
-        countQuery = await sql`SELECT COUNT(*) as total FROM leads`;
-        dataQuery = await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
+        countRows = await sql`SELECT COUNT(*) as total FROM leads`;
+        dataRows = await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`;
       }
 
-      const total = parseInt(countQuery.rows[0].total);
+      const total = parseInt(countRows[0].total);
       const totalPages = Math.ceil(total / limit);
 
       return res.status(200).json({
         success: true,
-        leads: dataQuery.rows,
+        leads: dataRows,
         pagination: { page, limit, total, totalPages }
       });
     } catch (error) {

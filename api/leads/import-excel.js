@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 const formidable = require('formidable');
 const XLSX = require('xlsx');
@@ -27,7 +27,6 @@ function parseForm(req) {
   });
 }
 
-// Map common Excel column headers to DB fields
 const COLUMN_MAP = {
   'full name': 'full_name', 'name': 'full_name', 'client name': 'full_name',
   'district': 'district',
@@ -65,6 +64,7 @@ module.exports = async function handler(req, res) {
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
+    const sql = getSQL();
     const { files } = await parseForm(req);
     const file = files.file?.[0] || files.file;
     if (!file) return res.status(400).json({ error: 'No file uploaded' });
@@ -84,7 +84,6 @@ module.exports = async function handler(req, res) {
       const raw = rows[i];
       const d = {};
 
-      // Map columns
       for (const [key, value] of Object.entries(raw)) {
         const normalizedKey = key.toLowerCase().trim();
         const dbField = COLUMN_MAP[normalizedKey];
@@ -123,7 +122,6 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    // Clean up temp file
     try { fs.unlinkSync(filePath); } catch {}
 
     return res.status(200).json({

@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const bcrypt = require('bcryptjs');
 
 module.exports = async function handler(req, res) {
@@ -6,6 +6,8 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
+    const sql = getSQL();
+
     // Create tables
     await sql`
       CREATE TABLE IF NOT EXISTS users (
@@ -72,14 +74,14 @@ module.exports = async function handler(req, res) {
     `;
 
     // Check if admin user exists
-    const { rows } = await sql`SELECT id FROM users WHERE username = 'admin'`;
-    if (rows.length === 0) {
+    const adminRows = await sql`SELECT id FROM users WHERE username = 'admin'`;
+    if (adminRows.length === 0) {
       const hash = await bcrypt.hash('admin123', 10);
       await sql`INSERT INTO users (username, password_hash, role) VALUES ('admin', ${hash}, 'admin')`;
     }
 
     // Seed default dropdowns if empty
-    const { rows: ddRows } = await sql`SELECT id FROM dropdowns LIMIT 1`;
+    const ddRows = await sql`SELECT id FROM dropdowns LIMIT 1`;
     if (ddRows.length === 0) {
       const defaults = [
         { category: 'district', items: ['Visakhapatnam', 'East Godavari', 'West Godavari', 'Krishna', 'Guntur', 'Prakasam', 'Nellore', 'Kadapa', 'Anantapur', 'Kurnool', 'Srikakulam', 'Vizianagaram', 'Chittoor'] },
@@ -97,7 +99,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Seed sample testimonials if empty
-    const { rows: testRows } = await sql`SELECT id FROM testimonials LIMIT 1`;
+    const testRows = await sql`SELECT id FROM testimonials LIMIT 1`;
     if (testRows.length === 0) {
       await sql`INSERT INTO testimonials (client_name, message, rating) VALUES ('Rajesh Kumar', 'Excellent service! Sri Radha Govind & CO made my tax filing process so smooth and hassle-free. Highly recommended!', 5)`;
       await sql`INSERT INTO testimonials (client_name, message, rating) VALUES ('Priya Sharma', 'Very professional team. They handled all my tax requirements with great care and precision. Will definitely come back.', 5)`;

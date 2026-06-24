@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -15,7 +15,8 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Username and password are required' });
     }
 
-    const { rows } = await sql`SELECT * FROM users WHERE username = ${username}`;
+    const sql = getSQL();
+    const rows = await sql`SELECT * FROM users WHERE username = ${username}`;
     if (rows.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }

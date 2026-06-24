@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sri-radha-govind-secret-key-2024';
@@ -20,10 +20,12 @@ module.exports = async function handler(req, res) {
   const id = req.query.id;
   if (!id) return res.status(400).json({ error: 'ID is required' });
 
+  const sql = getSQL();
+
   // GET — single lead
   if (req.method === 'GET') {
     try {
-      const { rows } = await sql`SELECT * FROM leads WHERE id = ${id}`;
+      const rows = await sql`SELECT * FROM leads WHERE id = ${id}`;
       if (rows.length === 0) return res.status(404).json({ error: 'Lead not found' });
       return res.status(200).json({ success: true, lead: rows[0] });
     } catch (error) {
@@ -37,7 +39,7 @@ module.exports = async function handler(req, res) {
       const d = req.body;
       const due = (parseFloat(d.total_fee) || 0) - (parseFloat(d.paid) || 0);
 
-      const { rows } = await sql`
+      const rows = await sql`
         UPDATE leads SET
           status = ${d.status || 'enquired'},
           full_name = ${d.full_name},
@@ -80,8 +82,8 @@ module.exports = async function handler(req, res) {
   // DELETE — delete lead
   if (req.method === 'DELETE') {
     try {
-      const { rowCount } = await sql`DELETE FROM leads WHERE id = ${id}`;
-      if (rowCount === 0) return res.status(404).json({ error: 'Lead not found' });
+      const rows = await sql`DELETE FROM leads WHERE id = ${id} RETURNING id`;
+      if (rows.length === 0) return res.status(404).json({ error: 'Lead not found' });
       return res.status(200).json({ success: true, message: 'Lead deleted' });
     } catch (error) {
       return res.status(500).json({ error: 'Failed to delete lead', details: error.message });

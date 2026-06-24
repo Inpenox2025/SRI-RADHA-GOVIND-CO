@@ -1,4 +1,4 @@
-const { sql } = require('@vercel/postgres');
+const { getSQL } = require('../../shared/db');
 const jwt = require('jsonwebtoken');
 const XLSX = require('xlsx');
 
@@ -20,16 +20,15 @@ module.exports = async function handler(req, res) {
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
+    const sql = getSQL();
     const status = req.query.status || '';
-    let result;
+    let leads;
 
     if (status) {
-      result = await sql`SELECT * FROM leads WHERE status = ${status} ORDER BY created_at DESC`;
+      leads = await sql`SELECT * FROM leads WHERE status = ${status} ORDER BY created_at DESC`;
     } else {
-      result = await sql`SELECT * FROM leads ORDER BY created_at DESC`;
+      leads = await sql`SELECT * FROM leads ORDER BY created_at DESC`;
     }
-
-    const leads = result.rows;
 
     const data = leads.map((l, i) => ({
       'S.No': i + 1,
@@ -64,7 +63,6 @@ module.exports = async function handler(req, res) {
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(data);
 
-    // Set column widths
     ws['!cols'] = [
       { width: 6 }, { width: 14 }, { width: 25 }, { width: 18 }, { width: 20 },
       { width: 14 }, { width: 15 }, { width: 15 }, { width: 20 }, { width: 14 },
@@ -75,7 +73,6 @@ module.exports = async function handler(req, res) {
     ];
 
     XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-
     const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
