@@ -1,4 +1,4 @@
-const { getSQL } = require('../../shared/db');
+const { getSQL } = require('../shared/db');
 const jwt = require('jsonwebtoken');
 const formidable = require('formidable');
 const XLSX = require('xlsx');

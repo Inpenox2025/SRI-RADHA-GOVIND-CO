@@ -1,4 +1,4 @@
-const { getSQL } = require('../../shared/db');
+const { getSQL } = require('../shared/db');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();

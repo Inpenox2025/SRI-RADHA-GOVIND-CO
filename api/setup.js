@@ -1,4 +1,4 @@
-const { getSQL } = require('../../shared/db');
+const { getSQL } = require('../shared/db');
 const bcrypt = require('bcryptjs');
 
 module.exports = async function handler(req, res) {

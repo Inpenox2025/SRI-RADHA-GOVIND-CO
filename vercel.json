@@ -1,11 +1,14 @@
 {
-  "buildCommand": "",
-  "outputDirectory": ".",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/api/leads/:id", "destination": "/api/leads/[id]" },
-    { "source": "/api/dropdowns/:id", "destination": "/api/dropdowns/[id]" },
-    { "source": "/api/users/:id", "destination": "/api/users/[id]" }
+    { "source": "/api/auth/login", "destination": "/api/auth?action=login" },
+    { "source": "/api/auth/me", "destination": "/api/auth?action=me" },
+    { "source": "/api/leads/import-excel", "destination": "/api/leads-import" },
+    { "source": "/api/leads/export-excel", "destination": "/api/leads?action=export-excel" },
+    { "source": "/api/leads/export-pdf", "destination": "/api/leads?action=export-pdf" },
+    { "source": "/api/leads/:id", "destination": "/api/leads?id=:id" },
+    { "source": "/api/dropdowns/:id", "destination": "/api/dropdowns?id=:id" },
+    { "source": "/api/users/:id", "destination": "/api/users?id=:id" }
   ],
   "headers": [
     {
