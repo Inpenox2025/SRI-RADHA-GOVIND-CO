@@ -154,4 +154,21 @@
   .dd-item .dd-label {
     font-size: 0.85rem;
   }
+  .dd-item.editing {
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .dd-item.editing .edit-input:not(.sort-edit) {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+  .dd-item.editing .sort-edit {
+    flex: 1;
+    min-width: 60px;
+  }
+  .dd-item.editing .dd-actions {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+  }
 }

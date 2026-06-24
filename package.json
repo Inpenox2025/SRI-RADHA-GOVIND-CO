@@ -4,7 +4,6 @@
   "private": true,
   "description": "Client Management Portal for Sri Radha Govind & CO",
   "scripts": {
-    "dev": "vercel dev",
     "build": "echo 'No build step needed'"
   },
   "dependencies": {

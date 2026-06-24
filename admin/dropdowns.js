@@ -104,6 +104,8 @@ function startEdit(id, label, sortOrder) {
   const item = document.querySelector(`[data-id="${id}"]`);
   if (!item) return;
 
+  item.classList.add('editing');
+
   item.innerHTML = `
     <input type="text" class="edit-input" id="edit_label_${id}" value="${escapeAttr(label)}">
     <input type="number" class="edit-input sort-edit" id="edit_sort_${id}" value="${sortOrder}">
