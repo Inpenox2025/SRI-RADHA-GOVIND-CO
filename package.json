@@ -1,0 +1,18 @@
+{
+  "name": "sri-radha-govind-co",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Client Management Portal for Sri Radha Govind & CO",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step needed'"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "xlsx": "^0.18.5",
+    "pdfkit": "^0.15.0",
+    "formidable": "^3.5.1"
+  }
+}

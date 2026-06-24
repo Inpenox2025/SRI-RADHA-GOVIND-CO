@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Management — Sri Radha Govind & CO Admin</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dropdowns.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-icon">SRG</div>
+        <div class="brand-text">
+            Sri Radha Govind
+            <span>Admin Panel</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+            <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="dropdowns.html" class="nav-item active">
+            <span class="nav-icon">📋</span> Dropdowns
+        </a>
+        <a href="users.html" class="nav-item">
+            <span class="nav-icon">👥</span> Users
+        </a>
+        <div class="nav-divider"></div>
+        <a href="../" class="nav-item">
+            <span class="nav-icon">🌐</span> View Website
+        </a>
+        <a href="#" class="nav-item" id="logoutBtn">
+            <span class="nav-icon">🚪</span> Logout
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="user-info" id="userInfo">
+            <div class="user-avatar">A</div>
+            <div>
+                <div class="user-name" id="userName">Admin</div>
+                <div class="user-role" id="userRole">admin</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══════ MAIN ═══════ -->
+<main class="main-content" id="mainContent">
+    <header class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <h1 class="page-title">Dropdown Management</h1>
+    </header>
+
+    <p class="page-desc">Manage dropdown options used across the enquiry form and admin panel. Changes apply immediately.</p>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs" id="categoryTabs">
+        <button class="tab active" data-category="district">District</button>
+        <button class="tab" data-category="employee_category">Employee Category</button>
+        <button class="tab" data-category="evc_status">EVC Status</button>
+        <button class="tab" data-category="mode_of_payment">Mode of Payment</button>
+        <button class="tab" data-category="client_since">Client Since</button>
+    </div>
+
+    <!-- Add New -->
+    <div class="add-form">
+        <input type="text" class="form-control" id="newLabel" placeholder="Enter new option...">
+        <input type="number" class="form-control sort-input" id="newSort" placeholder="Order" value="0">
+        <button class="btn btn-primary" id="addDropdownBtn">+ Add</button>
+    </div>
+
+    <!-- Dropdown Items List -->
+    <div class="dropdown-list" id="dropdownList">
+        <div class="loading-cell"><span class="spinner"></span> Loading...</div>
+    </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="dropdowns.js"></script>
+</body>
+</html>

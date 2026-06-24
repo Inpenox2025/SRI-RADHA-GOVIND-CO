@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Sri Radha Govind & CO</title>
+    <meta name="description" content="Admin portal login for Sri Radha Govind & CO client management system.">
+    <link rel="stylesheet" href="login.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+</head>
+<body>
+
+<div class="login-bg">
+    <div class="login-container">
+        <div class="login-card" id="loginCard">
+            <div class="login-logo">
+                <div class="logo-icon">SRG</div>
+            </div>
+            <h1>Admin Portal</h1>
+            <p class="login-desc">Sri Radha Govind & CO — Client Management</p>
+
+            <form id="loginForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-icon">
+                        <span class="icon">👤</span>
+                        <input type="text" class="form-control" id="username" placeholder="Enter username" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-icon">
+                        <span class="icon">🔒</span>
+                        <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                    </div>
+                </div>
+                <div class="error-msg" id="errorMsg"></div>
+                <button type="submit" class="btn-login" id="loginBtn">Sign In</button>
+            </form>
+
+            <a href="../" class="back-link">← Back to Website</a>
+        </div>
+    </div>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Sri Radha Govind & CO Admin</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-icon">SRG</div>
+        <div class="brand-text">
+            Sri Radha Govind
+            <span>Admin Panel</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active" id="navDashboard">
+            <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="dropdowns.html" class="nav-item" id="navDropdowns">
+            <span class="nav-icon">📋</span> Dropdowns
+        </a>
+        <a href="users.html" class="nav-item" id="navUsers">
+            <span class="nav-icon">👥</span> Users
+        </a>
+        <div class="nav-divider"></div>
+        <a href="../" class="nav-item">
+            <span class="nav-icon">🌐</span> View Website
+        </a>
+        <a href="#" class="nav-item" id="logoutBtn">
+            <span class="nav-icon">🚪</span> Logout
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="user-info" id="userInfo">
+            <div class="user-avatar">A</div>
+            <div>
+                <div class="user-name" id="userName">Admin</div>
+                <div class="user-role" id="userRole">admin</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══════ MAIN CONTENT ═══════ -->
+<main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <header class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <h1 class="page-title">Dashboard</h1>
+        <div class="topbar-actions">
+            <button class="btn btn-sm btn-outline" id="setupBtn" title="Run DB Setup">⚙️ Setup DB</button>
+        </div>
+    </header>
+
+    <!-- ═══════ STATS CARDS ═══════ -->
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+            <div class="stat-icon total">📁</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statTotal">0</div>
+                <div class="stat-label">Total Leads</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon enquired">📝</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statEnquired">0</div>
+                <div class="stat-label">Enquired</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon started">🚀</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statStarted">0</div>
+                <div class="stat-label">Started</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon progress">⏳</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statProgress">0</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon completed">✅</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statCompleted">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ TOOLBAR ═══════ -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search by name, mobile, PAN...">
+            <select class="filter-select" id="filterStatus">
+                <option value="">All Status</option>
+                <option value="enquired">Enquired</option>
+                <option value="started">Started</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+            <select class="filter-select" id="filterDistrict">
+                <option value="">All Districts</option>
+            </select>
+        </div>
+        <div class="toolbar-right">
+            <button class="btn btn-sm btn-glass" id="importBtn">📥 Import Excel</button>
+            <button class="btn btn-sm btn-glass" id="exportBtn">📤 Export Excel</button>
+            <button class="btn btn-sm btn-primary" id="addLeadBtn">+ Add Lead</button>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="importFile" accept=".xlsx,.xls" style="display:none">
+
+    <!-- ═══════ LEADS TABLE ═══════ -->
+    <div class="table-container">
+        <table class="data-table" id="leadsTable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>District</th>
+                    <th>PAN</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Fee</th>
+                    <th>Paid</th>
+                    <th>Due</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="leadsBody">
+                <tr><td colspan="11" class="loading-cell"><span class="spinner"></span> Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════ PAGINATION ═══════ -->
+    <div class="pagination" id="pagination"></div>
+</main>
+
+<!-- ═══════ LEAD MODAL ═══════ -->
+<div class="modal-overlay" id="leadModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">Add New Lead</h2>
+            <button class="modal-close" id="modalClose">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="leadForm" autocomplete="off">
+                <input type="hidden" id="lead_id" name="id">
+
+                <!-- Status -->
+                <div class="form-section">
+                    <h3>Status</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_status">Status</label>
+                            <select class="form-control" id="lead_status" name="status">
+                                <option value="enquired">Enquired</option>
+                                <option value="started">Started</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. Client Identity -->
+                <div class="form-section">
+                    <h3>1. Client Identity & Demographics</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_full_name">Full Name <span class="req">*</span></label>
+                            <input type="text" class="form-control" id="lead_full_name" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_district">District</label>
+                            <select class="form-control" id="lead_district" name="district">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_employee_category">Employee Category</label>
+                            <select class="form-control" id="lead_employee_category" name="employee_category">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_date_of_birth">Date of Birth</label>
+                            <input type="date" class="form-control" id="lead_date_of_birth" name="date_of_birth">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_mobile_no">Mobile No</label>
+                            <input type="tel" class="form-control" id="lead_mobile_no" name="mobile_no">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_alt_mobile_no">Alt Mobile No</label>
+                            <input type="tel" class="form-control" id="lead_alt_mobile_no" name="alt_mobile_no">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_bank_account_no">Bank Account No</label>
+                            <input type="text" class="form-control" id="lead_bank_account_no" name="bank_account_no">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_ifsc_code">IFSC Code</label>
+                            <input type="text" class="form-control" id="lead_ifsc_code" name="ifsc_code">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Tax & Portal -->
+                <div class="form-section">
+                    <h3>2. Tax & Portal Credentials</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_pan_card_no">PAN Card No</label>
+                            <input type="text" class="form-control" id="lead_pan_card_no" name="pan_card_no" maxlength="10" style="text-transform:uppercase">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_portal_password">IT Portal Password</label>
+                            <input type="text" class="form-control" id="lead_portal_password" name="portal_password">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_evc_status">EVC / Aadhaar Status</label>
+                            <select class="form-control" id="lead_evc_status" name="evc_status">
+                                <option value="">Select Status</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_date_of_filing">Date of Filing</label>
+                            <input type="date" class="form-control" id="lead_date_of_filing" name="date_of_filing">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_client_since">Client Since</label>
+                            <select class="form-control" id="lead_client_since" name="client_since">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_rank_designation">Rank / Designation</label>
+                            <input type="text" class="form-control" id="lead_rank_designation" name="rank_designation">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Financial Data -->
+                <div class="form-section">
+                    <h3>3. Financial Data</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_gross_salary">Gross Salary (₹)</label>
+                            <input type="number" class="form-control" id="lead_gross_salary" name="gross_salary" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_refund">Refund (₹)</label>
+                            <input type="number" class="form-control" id="lead_refund" name="refund" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_deduction_1">Deduction 1 (₹)</label>
+                            <input type="number" class="form-control" id="lead_deduction_1" name="deduction_1" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_deduction_2">Deduction 2 (₹)</label>
+                            <input type="number" class="form-control" id="lead_deduction_2" name="deduction_2" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Billing & Fees -->
+                <div class="form-section">
+                    <h3>4. Billing & Fees</h3>
+                    <div class="form-row form-row-3">
+                        <div class="form-group">
+                            <label for="lead_total_fee">Total Fee (₹)</label>
+                            <input type="number" class="form-control" id="lead_total_fee" name="total_fee" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_paid">Paid (₹)</label>
+                            <input type="number" class="form-control" id="lead_paid" name="paid" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_due">Due (₹)</label>
+                            <input type="number" class="form-control due-field" id="lead_due" name="due" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead_date_of_payment">Date of Payment</label>
+                            <input type="date" class="form-control" id="lead_date_of_payment" name="date_of_payment">
+                        </div>
+                        <div class="form-group">
+                            <label for="lead_mode_of_payment">Mode of Payment</label>
+                            <select class="form-control" id="lead_mode_of_payment" name="mode_of_payment">
+                                <option value="">Select Mode</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Additional Notes -->
+                <div class="form-section">
+                    <h3>5. Additional Notes</h3>
+                    <div class="form-group">
+                        <label for="lead_remarks_1">Remarks (1)</label>
+                        <textarea class="form-control" id="lead_remarks_1" name="remarks_1" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="lead_remarks_2">Remarks (2)</label>
+                        <textarea class="form-control" id="lead_remarks_2" name="remarks_2" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-glass" id="modalCancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveLeadBtn">Save Lead</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════ VIEW MODAL ═══════ -->
+<div class="modal-overlay" id="viewModal">
+    <div class="modal modal-view">
+        <div class="modal-header">
+            <h2>Lead Details</h2>
+            <button class="modal-close" id="viewModalClose">✕</button>
+        </div>
+        <div class="modal-body" id="viewModalBody">
+            <!-- Populated by JS -->
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-glass" id="viewPdfBtn">📄 Export PDF</button>
+            <button class="btn btn-primary" id="viewEditBtn">✏️ Edit</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

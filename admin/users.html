@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management — Sri Radha Govind & CO Admin</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="users.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👥</text></svg>">
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-icon">SRG</div>
+        <div class="brand-text">
+            Sri Radha Govind
+            <span>Admin Panel</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+            <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="dropdowns.html" class="nav-item">
+            <span class="nav-icon">📋</span> Dropdowns
+        </a>
+        <a href="users.html" class="nav-item active">
+            <span class="nav-icon">👥</span> Users
+        </a>
+        <div class="nav-divider"></div>
+        <a href="../" class="nav-item">
+            <span class="nav-icon">🌐</span> View Website
+        </a>
+        <a href="#" class="nav-item" id="logoutBtn">
+            <span class="nav-icon">🚪</span> Logout
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="user-info" id="userInfo">
+            <div class="user-avatar">A</div>
+            <div>
+                <div class="user-name" id="userName">Admin</div>
+                <div class="user-role" id="userRole">admin</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══════ MAIN ═══════ -->
+<main class="main-content" id="mainContent">
+    <header class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <h1 class="page-title">User Management</h1>
+    </header>
+
+    <div class="user-limit-info" id="limitInfo">
+        <span class="limit-icon">ℹ️</span>
+        <span>You can create up to <strong>2 sub-admin</strong> users. <span id="limitCount">0/2</span> used.</span>
+    </div>
+
+    <!-- Add User Form -->
+    <div class="add-user-form" id="addUserForm">
+        <h3>Add Sub-Admin</h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="newUsername">Username</label>
+                <input type="text" class="form-control" id="newUsername" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Password</label>
+                <input type="password" class="form-control" id="newPassword" placeholder="Enter password">
+            </div>
+            <div class="form-group form-action">
+                <button class="btn btn-primary" id="addUserBtn">+ Create User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users List -->
+    <div class="users-list" id="usersList">
+        <div class="loading-cell"><span class="spinner"></span> Loading...</div>
+    </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="users.js"></script>
+</body>
+</html>

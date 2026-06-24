@@ -3,9 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sri Radha Govind & CO — Tax Consultants & Financial Services</title>
+    <meta name="description" content="Professional tax consultancy and financial services by Sri Radha Govind & CO. Expert ITR filing, tax planning, and financial advisory for police, excise, and other professionals.">
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
 </head>
 <body>
-    <h1>Hello</h1>
+
+<!-- Background Pattern -->
+<div class="bg-pattern"></div>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="#" class="nav-brand">
+            <div class="logo-icon">SRG</div>
+            <div class="brand-text">
+                Sri Radha Govind & CO
+                <span>Tax Consultants</span>
+            </div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#enquiry">Enquiry</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="admin/" class="btn btn-outline">Admin Portal</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ═══════════ HERO + ENQUIRY FORM ═══════════ -->
+<section class="hero" id="home">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Trusted Since Years
+            </div>
+            <h1>
+                Expert <span class="highlight">Tax Solutions</span><br>
+                For Your Financial Peace
+            </h1>
+            <p>
+                Sri Radha Govind & CO provides comprehensive tax consultancy, ITR filing,
+                and financial services tailored for police personnel, excise officers, and professionals
+                across Andhra Pradesh.
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="number">1000+</div>
+                    <div class="label">Clients Served</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">10+</div>
+                    <div class="label">Years Experience</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">99%</div>
+                    <div class="label">Satisfaction Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════ ENQUIRY FORM ═══════ -->
+        <div class="enquiry-card" id="enquiry">
+            <div id="enquiryFormContent">
+                <h2>📋 Quick Enquiry</h2>
+                <p class="form-desc">Fill in your details and we'll get back to you promptly.</p>
+                <form id="enquiryForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="eq_name">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="eq_name" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eq_mobile">Mobile No <span class="required">*</span></label>
+                            <input type="tel" class="form-control" id="eq_mobile" name="mobile_no" placeholder="Mobile number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eq_pan">PAN Card No</label>
+                            <input type="text" class="form-control" id="eq_pan" name="pan_card_no" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eq_district">District</label>
+                            <select class="form-control" id="eq_district" name="district">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="eq_category">Employee Category</label>
+                            <select class="form-control" id="eq_category" name="employee_category">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="eq_remarks">Remarks / Message</label>
+                        <textarea class="form-control" id="eq_remarks" name="remarks_1" placeholder="Any specific requirements or questions..." rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-submit" id="submitBtn">
+                        Submit Enquiry
+                    </button>
+                </form>
+            </div>
+            <div class="form-success" id="formSuccess">
+                <div class="check-icon">✓</div>
+                <h3>Enquiry Submitted!</h3>
+                <p>Thank you for reaching out. Our team will contact you within 24 hours.</p>
+                <button class="btn btn-outline" style="margin-top: 16px;" onclick="resetForm()">Submit Another</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ SERVICES ═══════════ -->
+<section class="services" id="services">
+    <div class="container">
+        <h2 class="section-title fade-in">Our Services</h2>
+        <p class="section-subtitle fade-in">Comprehensive financial solutions designed for government employees and professionals</p>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <div class="icon">📄</div>
+                <h3>ITR Filing</h3>
+                <p>Expert income tax return filing for salaried individuals, police officers, and government employees with maximum refund optimization.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="icon">🏦</div>
+                <h3>Tax Planning</h3>
+                <p>Strategic tax planning and deduction optimization to minimize your tax liability while ensuring full compliance with IT regulations.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="icon">🔐</div>
+                <h3>EVC & Aadhaar Linking</h3>
+                <p>Complete assistance with EVC generation, Aadhaar verification, and IT portal management for seamless e-filing.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="icon">💰</div>
+                <h3>Refund Tracking</h3>
+                <p>End-to-end refund tracking and follow-up with the IT department to ensure timely processing of your tax refunds.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="icon">📊</div>
+                <h3>Salary Restructuring</h3>
+                <p>Expert advice on salary structure optimization to maximize take-home pay while maintaining tax efficiency.</p>
+            </div>
+            <div class="service-card fade-in">
+                <div class="icon">🤝</div>
+                <h3>Dedicated Support</h3>
+                <p>Personalized one-on-one consultation and year-round support for all your tax-related queries and concerns.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+<section class="testimonials" id="testimonials">
+    <div class="container">
+        <h2 class="section-title fade-in">What Our Clients Say</h2>
+        <p class="section-subtitle fade-in">Trusted by thousands of professionals across Andhra Pradesh</p>
+        <div class="testimonials-grid" id="testimonialsGrid">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-text">Sri Radha Govind & CO</div>
+                <p>Professional tax consultancy and financial advisory services. Your trusted partner for all tax-related needs in Andhra Pradesh.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#enquiry">Enquiry</a></li>
+                    <li><a href="#testimonials">Reviews</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="#">📞 Contact Us</a></li>
+                    <li><a href="#">📧 Email</a></li>
+                    <li><a href="#">📍 Andhra Pradesh, India</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Sri Radha Govind & CO. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<script src="index.js"></script>
 </body>
 </html>

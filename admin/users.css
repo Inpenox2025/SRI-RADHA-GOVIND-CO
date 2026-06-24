@@ -1,0 +1,150 @@
+/* User Management Extra Styles */
+
+.user-limit-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: var(--text2);
+}
+
+.user-limit-info .limit-icon { font-size: 1.2rem; }
+
+.user-limit-info strong { color: var(--gold); }
+
+.add-user-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.add-user-form h3 {
+  font-family: var(--font-h);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.add-user-form .form-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+}
+
+.add-user-form .form-group {
+  flex: 1;
+}
+
+.add-user-form .form-action {
+  flex: 0 0 auto;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: 0.2s;
+}
+
+.user-card:hover {
+  border-color: var(--border-hover);
+}
+
+.user-card .uc-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.user-card .uc-avatar.admin {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--bg);
+}
+
+.user-card .uc-avatar.sub_admin {
+  background: rgba(59,130,246,0.2);
+  color: var(--info);
+}
+
+.user-card .uc-info {
+  flex: 1;
+}
+
+.user-card .uc-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.user-card .uc-role {
+  font-size: 0.8rem;
+  color: var(--text3);
+  text-transform: capitalize;
+  margin-top: 2px;
+}
+
+.user-card .uc-date {
+  font-size: 0.8rem;
+  color: var(--text3);
+}
+
+.user-card .uc-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.role-badge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-badge.admin {
+  background: var(--gold-glow);
+  color: var(--gold);
+}
+
+.role-badge.sub_admin {
+  background: rgba(59,130,246,0.15);
+  color: var(--info);
+}
+
+.add-user-form.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .add-user-form .form-row {
+    flex-direction: column;
+  }
+  .user-card {
+    flex-wrap: wrap;
+  }
+}
