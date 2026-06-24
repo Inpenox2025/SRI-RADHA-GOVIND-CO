@@ -77,10 +77,10 @@ async function loadUsers() {
         </div>
         <div class="uc-date">Created: ${u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN') : '—'}</div>
         <div class="uc-actions">
+          <button class="action-btn" onclick="editUser(${u.id}, '${escapeAttr(u.username)}')" title="Edit">✏️</button>
           ${u.role !== 'admin' ? `
-            <button class="action-btn" onclick="editUser(${u.id}, '${escapeAttr(u.username)}')" title="Edit">✏️</button>
             <button class="action-btn danger" onclick="deleteUser(${u.id}, '${escapeAttr(u.username)}')" title="Delete">🗑</button>
-          ` : '<span style="font-size:0.8rem;color:var(--text3)">Protected</span>'}
+          ` : '<span style="font-size:0.8rem;color:var(--text3);margin-left:8px">Protected (Delete)</span>'}
         </div>
       </div>
     `).join('');
