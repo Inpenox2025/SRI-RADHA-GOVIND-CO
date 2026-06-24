@@ -30,13 +30,13 @@ function authHeaders() {
 function logout() {
   localStorage.removeItem('srg_token');
   localStorage.removeItem('srg_user');
-  window.location.href = 'index.html';
+  window.location.href = '/admin/';
 }
 
 // ─────── Init ───────
 document.addEventListener('DOMContentLoaded', async () => {
   const token = getToken();
-  if (!token) { window.location.href = 'index.html'; return; }
+  if (!token) { window.location.href = '/admin/'; return; }
 
   // Verify token
   try {

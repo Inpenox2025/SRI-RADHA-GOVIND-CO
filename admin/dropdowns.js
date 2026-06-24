@@ -13,12 +13,12 @@ function authHeaders() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  if (!getToken()) { window.location.href = 'index.html'; return; }
+  if (!getToken()) { window.location.href = '/admin/'; return; }
 
   try {
     const res = await fetch(`${API_BASE}/auth/me`, { headers: { 'Authorization': `Bearer ${getToken()}` } });
-    if (!res.ok) { window.location.href = 'index.html'; return; }
-  } catch { window.location.href = 'index.html'; return; }
+    if (!res.ok) { window.location.href = '/admin/'; return; }
+  } catch { window.location.href = '/admin/'; return; }
 
   const user = getUser();
   if (user) {
@@ -186,7 +186,7 @@ function initEventListeners() {
     e.preventDefault();
     localStorage.removeItem('srg_token');
     localStorage.removeItem('srg_user');
-    window.location.href = 'index.html';
+    window.location.href = '/admin/';
   });
 
   // Sidebar toggle

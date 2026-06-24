@@ -18,7 +18,7 @@ async function verifyAndRedirect(token) {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     if (res.ok) {
-      window.location.href = 'dashboard.html';
+      window.location.href = '/admin/dashboard.html';
     } else {
       localStorage.removeItem('srg_token');
       localStorage.removeItem('srg_user');
@@ -55,7 +55,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     if (data.success) {
       localStorage.setItem('srg_token', data.token);
       localStorage.setItem('srg_user', JSON.stringify(data.user));
-      window.location.href = 'dashboard.html';
+      window.location.href = '/admin/dashboard.html';
     } else {
       errorMsg.textContent = data.error || 'Invalid credentials';
     }
