@@ -573,8 +573,10 @@ async function setupDB() {
   if (!confirm('Run database setup? This will create tables and seed default data.')) return;
 
   const btn = document.getElementById('setupBtn');
-  btn.innerHTML = '<span class="spinner"></span> Setting up...';
-  btn.disabled = true;
+  if (btn) {
+    btn.innerHTML = '<span class="spinner"></span> Setting up...';
+    btn.disabled = true;
+  }
 
   try {
     const res = await fetch(`${API_BASE}/setup`, { method: 'POST' });
@@ -590,8 +592,10 @@ async function setupDB() {
   } catch {
     showToast('Setup failed — check database connection', 'error');
   } finally {
-    btn.innerHTML = '⚙️ Setup DB';
-    btn.disabled = false;
+    if (btn) {
+      btn.innerHTML = '⚙️ Setup DB';
+      btn.disabled = false;
+    }
   }
 }
 
@@ -669,7 +673,10 @@ function initEventListeners() {
   });
 
   // Setup DB
-  document.getElementById('setupBtn').addEventListener('click', setupDB);
+  const setupBtn = document.getElementById('setupBtn');
+  if (setupBtn) {
+    setupBtn.addEventListener('click', setupDB);
+  }
 
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', (e) => {
