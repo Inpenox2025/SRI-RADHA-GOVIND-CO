@@ -1,4 +1,6 @@
 {
+  "buildCommand": "",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "rewrites": [
     { "source": "/api/leads/:id", "destination": "/api/leads/[id]" },
