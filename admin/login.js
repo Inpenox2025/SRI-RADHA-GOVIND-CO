@@ -28,6 +28,7 @@ async function verifyAndRedirect(token) {
   }
 }
 
+
 // Login form
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
