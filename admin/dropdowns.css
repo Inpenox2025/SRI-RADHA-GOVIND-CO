@@ -125,11 +125,17 @@
 
 @media (max-width: 768px) {
   .add-form {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    gap: 8px;
   }
   .add-form .form-control {
     max-width: 100%;
+  }
+  .add-form button {
+    grid-column: span 2;
+    width: 100%;
+    justify-content: center;
   }
   .category-tabs {
     gap: 6px;
@@ -137,5 +143,15 @@
   .tab {
     padding: 8px 14px;
     font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dd-item {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+  .dd-item .dd-label {
+    font-size: 0.85rem;
   }
 }

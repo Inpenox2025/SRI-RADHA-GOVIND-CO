@@ -204,6 +204,13 @@ function initEventListeners() {
   document.getElementById('sidebarClose').addEventListener('click', () => {
     document.getElementById('sidebar').classList.remove('open');
   });
+  document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebarToggle');
+    if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  });
 
   // Enter key on inputs
   document.getElementById('newPassword').addEventListener('keydown', (e) => {
